@@ -49,7 +49,7 @@ end
 
     @testset "Shape" begin
         @testset "Sphere" begin
-            s = Sphere([3,4], 5)
+            s = Sphere([3,4], 10)
             @test s == deepcopy(s)
             @test hash(s) == hash(deepcopy(s))
             @test @inferred(ndims(s)) == 2
@@ -58,7 +58,7 @@ end
             @test @inferred(normal([-1,2],s)) == normalize([-1,2] - [3,4])
             @test @inferred(bounds(s)) == ([-2,-1],[8,9])
             @test checkbounds(s)
-            @test checkbounds(Sphere([1,2,3], 2))
+            @test checkbounds(Sphere([1,2,3], 4))
         end
 
         @testset "Box" begin
@@ -140,7 +140,7 @@ end
         end
 
         @testset "Cylinder" begin
-            c = Cylinder([0,0,0], 0.3, [0,0,1], 2.2)
+            c = Cylinder([0,0,0], 0.6, [0,0,1], 2.2)
             @test c == deepcopy(c)
             @test hash(c) == hash(deepcopy(c))
             @test @inferred([0.2,0.2,1] ∈ c)
@@ -150,20 +150,20 @@ end
             @test normal([0.31, 0, 0.3], c) == [1,0,0]
             @test @inferred(bounds(c)) ≈ ([-0.3,-0.3,-1.1],[0.3,0.3,1.1])
             @test checkbounds(c)
-            @test checkbounds(Cylinder([1,17,44], 0.3, [1,-2,3], 1.1))
+            @test checkbounds(Cylinder([1,17,44], 0.6, [1,-2,3], 1.1))
         end
     end
 
     @testset "KDTree" begin
-        s = Shape{2}[Sphere([i,0], 1, i) for i in 0:20]
+        s = Shape{2}[Sphere([i,0], 2, i) for i in 0:20]
         kd = KDTree(s)
         @test GeometryPrimitives.depth(kd) == 4
         @test get(findin([10.1,0], kd)).data == 10
         @test isnull(findin([10.1,1], kd))
         @test checktree(kd, s)
-        s = Shape{3}[Sphere(SVector(randn(rng),randn(rng),randn(rng)), 0.01) for i=1:100]
+        s = Shape{3}[Sphere(SVector(randn(rng),randn(rng),randn(rng)), 0.02) for i=1:100]
         @test checktree(KDTree(s), s)
-        s = Shape{3}[Sphere(SVector(randn(rng),randn(rng),randn(rng)), 0.1) for i=1:100]
+        s = Shape{3}[Sphere(SVector(randn(rng),randn(rng),randn(rng)), 0.2) for i=1:100]
         @test checktree(KDTree(s), s)
     end
 

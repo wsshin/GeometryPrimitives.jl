@@ -9,11 +9,11 @@ mutable struct Cylinder{N,D} <: Shape{N}
     Cylinder{N,D}(c,r,a,h2,data) where {N,D} = new(c,r,a,h2,data)
 end
 
-Cylinder(c::SVector{N}, r::Real, a::SVector{N}, h::Real=Inf, data::D=nothing) where {N,D} =
-    Cylinder{N,D}(c, r, normalize(a), 0.5h, data)
+Cylinder(c::SVector{N}, d::Real, a::SVector{N}, h::Real=Inf, data::D=nothing) where {N,D} =
+    Cylinder{N,D}(c, 0.5d, normalize(a), 0.5h, data)
 
-Cylinder(c::AbstractVector, r::Real, a::AbstractVector, h::Real=Inf, data=nothing) =
-    (N = length(c); Cylinder(SVector{N}(c), r, SVector{N}(a), h, data))
+Cylinder(c::AbstractVector, d::Real, a::AbstractVector, h::Real=Inf, data=nothing) =
+    (N = length(c); Cylinder(SVector{N}(c), d, SVector{N}(a), h, data))
 
 Base.:(==)(s1::Cylinder, s2::Cylinder) = s1.c==s2.c && s1.a==s2.a && s1.r==s2.r && s1.h2==s2.h2 && s1.data==s2.data
 Base.hash(s::Cylinder, h::UInt) = hash(s.c, hash(s.a, hash(s.r, hash(s.h2, hash(s.data, hash(:Cylinder, h))))))
